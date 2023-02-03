@@ -1,19 +1,20 @@
 package com.tomato.grocery.entity;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.JoinColumn;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "app_user")
 public class AppUser {
 	
 	//Fields
@@ -24,14 +25,23 @@ public class AppUser {
 	private String email;
 	private String password;
 	private String mobileNumber;
-	@JsonFormat(pattern="yyyy-MM-dd")
-	private LocalDate registrationDate;
+	private LocalDateTime registrationDate;
 	
 	@OneToMany
 	@JoinColumn(name = "userId", referencedColumnName = "userId")
-	List<Address> addresses;
+	private List<Address> addresses = new ArrayList<>();
+	
+	@OneToMany
+	@JoinColumn(name = "userId", referencedColumnName = "userId")
+	private List<Order> orders = new ArrayList<>();
 	
 	//Methods
+	public List<Order> getOrders() {
+		return orders;
+	}
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
+	}
 	public List<Address> getAddresses() {
 		return addresses;
 	}
@@ -74,10 +84,10 @@ public class AppUser {
 	public void setMobileNumber(String mobileNUmber) {
 		this.mobileNumber = mobileNUmber;
 	}
-	public LocalDate getRegistrationDate() {
+	public LocalDateTime getRegistrationDate() {
 		return registrationDate;
 	}
-	public void setRegistrationDate(LocalDate registrationDate) {
+	public void setRegistrationDate(LocalDateTime registrationDate) {
 		this.registrationDate = registrationDate;
 	}
 }

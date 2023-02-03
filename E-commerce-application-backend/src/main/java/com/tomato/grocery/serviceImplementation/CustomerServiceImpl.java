@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.tomato.grocery.entity.Address;
 import com.tomato.grocery.entity.AppUser;
+import com.tomato.grocery.entity.Product;
 import com.tomato.grocery.repository.AddressDAO;
+import com.tomato.grocery.repository.ProductDAO;
 import com.tomato.grocery.repository.UserDAO;
 import com.tomato.grocery.service.CustomerService;
 
@@ -20,13 +22,31 @@ public class CustomerServiceImpl implements CustomerService{
 	@Autowired
 	private AddressDAO addressDao;
 	
+	@Autowired
+	private ProductDAO productDao;
+	
+	
 	@Override
 	public AppUser registerUser(AppUser userReq) {
-		List<Address> addresses = userReq.getAddresses();
-		for(Address address: addresses) {
-			addressDao.save(address);
+		AppUser user = new AppUser();
+		// if user already exist please return a string saying "user exist, please login"
+		if(userDao.findByEmail(userReq.getEmail())!=null) {
+			user = null;
 		}
-		return userDao.save(userReq);
+		else {
+			List<Address> addresses = userReq.getAddresses();
+			for(Address address: addresses) {
+				addressDao.save(address);
+			}
+			user = userDao.save(userReq);
+		}
+		return user;
+	}
+
+	@Override
+	public List<Product> getAllProducts() {
+		List<Product> products = productDao.findAll();
+		return products;
 	}
 	
 }
