@@ -1,16 +1,18 @@
 package com.tomato.grocery.entity;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapKeyJoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
@@ -18,7 +20,7 @@ import jakarta.persistence.Table;
 @Table(name = "orders") //class Order
 public class Order {
 	
-	@Id @GeneratedValue
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private long orderId;
 	private float orderAmount;
 	private LocalDateTime orderDate;
@@ -27,29 +29,34 @@ public class Order {
 	
 	@ManyToOne
 	@JoinColumn(name = "userId", referencedColumnName = "userId")
-	private AppUser appUser;
+	private AppUser user;
 	@OneToOne
 	@JoinColumn(name = "addressId")
 	private Address address;
-	@ManyToMany
+	@ElementCollection
 	@JoinTable(name = "order_product",
-			joinColumns = @JoinColumn(name = "orderId"),
-			inverseJoinColumns = @JoinColumn(name = "productId"))
-	@JoinColumn(name = "productId", referencedColumnName = "productId")
-	private List<Product> products = new ArrayList<>();
+			joinColumns = @JoinColumn(name = "orderId"))
+	@MapKeyJoinColumn(name = "product_id")
+	private Map<Long, Integer> productMap = new HashMap<>();
 	
 	
-	public List<Product> getProducts() {
-		return products;
+	public AppUser getUser() {
+		return user;
 	}
-	public void setProducts(List<Product> products) {
-		this.products = products;
+	public void setUser(AppUser user) {
+		this.user = user;
+	}
+	public Map<Long, Integer> getProductMap() {
+		return productMap;
+	}
+	public void setProductMap(Map<Long, Integer> productMap) {
+		this.productMap = productMap;
 	}
 	public AppUser getAppUser() {
-		return appUser;
+		return user;
 	}
 	public void setAppUser(AppUser appUser) {
-		this.appUser = appUser;
+		this.user = appUser;
 	}
 	public Address getAddress() {
 		return address;

@@ -6,4 +6,6 @@ import com.tomato.grocery.entity.Product;
 
 public interface ProductDAO extends JpaRepository<Product, Long>{
 
+	Product findByProductName(String productName);
+
 }

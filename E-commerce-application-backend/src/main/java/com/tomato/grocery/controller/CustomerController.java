@@ -1,6 +1,7 @@
 package com.tomato.grocery.controller;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import com.tomato.grocery.service.CustomerService;
 public class CustomerController {
 	
 	@Autowired
-	CustomerService customerService;
+	private CustomerService customerService;
 	
 	@PostMapping(path = "/registerUser")
 	public AppUser RegisterUser(@RequestBody AppUser userReq) {
@@ -32,12 +33,15 @@ public class CustomerController {
 	
 	@GetMapping(path = "/browseProducts")
 	public List<Product> getAllProducts() {
-		List<Product> products = customerService.getAllProducts();
+		List<Product> products = new ArrayList<>(); 
+		products = customerService.getAllProducts();
 		return products;
 	}
 	
 	@PostMapping(path = "/createOrder")
-	public Order createOrder(@RequestBody Order order) {
-		return null;
+	public Order createOrder(@RequestBody Order orderReq) {
+		Order order = new Order();
+		customerService.createOrder(orderReq);
+		return order;
 	}
 }

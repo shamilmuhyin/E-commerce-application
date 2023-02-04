@@ -18,7 +18,7 @@ import jakarta.persistence.Table;
 public class AppUser {
 	
 	//Fields
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id @GeneratedValue(strategy = GenerationType.AUTO)
 	private long userId;
 	private String firstName;
 	private String lastName;
